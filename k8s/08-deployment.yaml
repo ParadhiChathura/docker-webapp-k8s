@@ -19,11 +19,11 @@ spec:
       labels: {app: vprofile-app}
     spec:
       terminationGracePeriodSeconds: 60
-      # One pod per AZ (hard rule), and spread across nodes (soft rule)
+      #  Spread application pods across available nodes and zones
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfiable: DoNotSchedule
+          whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels: {app: vprofile-app}
         - maxSkew: 1
@@ -82,7 +82,7 @@ spec:
             failureThreshold: 3
           lifecycle:
             preStop:
-              # let the ALB deregister the pod before Tomcat stops
+              # Allow time for graceful connection draining before Tomcat stops
               exec: {command: ["sleep", "20"]}
           securityContext:
             allowPrivilegeEscalation: false

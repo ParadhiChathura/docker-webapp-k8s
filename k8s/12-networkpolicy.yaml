@@ -8,7 +8,7 @@ spec:
   podSelector: {}
   policyTypes: [Ingress]
 ---
-# App: port 8080 open to the ALB (which targets pod IPs directly)
+# App: allow incoming HTTP traffic on port 8080
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
