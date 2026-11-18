@@ -38,3 +38,24 @@ spec:
             matchLabels: {app: vprofile-app}
       ports:
         - {protocol: TCP, port: 3306}
+---
+# RabbitMQ: allow connections only from VProfile application pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: rabbitmq-allow-app
+  namespace: vprofile
+spec:
+  podSelector:
+    matchLabels:
+      app: rabbitmq
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: vprofile-app
+      ports:
+        - protocol: TCP
+          port: 5672
