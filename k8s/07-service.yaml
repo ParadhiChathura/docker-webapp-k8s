@@ -22,7 +22,7 @@ spec:
   ports:
     - {name: mysql, port: 3306}
 ---
-# App service - the ALB Ingress sends traffic straight to these pod IPs
+# App service - access through NodePort 30080; no application Load Balancer
 apiVersion: v1
 kind: Service
 metadata:
@@ -30,7 +30,7 @@ metadata:
   namespace: vprofile
   labels: {app: vprofile-app}
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector: {app: vprofile-app}
   ports:
-    - {name: http, port: 80, targetPort: http}
+    - {name: http, port: 80, targetPort: http, nodePort: 30080}
